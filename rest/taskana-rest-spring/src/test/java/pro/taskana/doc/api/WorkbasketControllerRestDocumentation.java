@@ -20,7 +20,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import pro.taskana.common.rest.Mapping;
+import pro.taskana.common.rest.RestEndpoints;
 import pro.taskana.common.rest.models.TaskanaPagedModelKeys;
 import pro.taskana.common.test.doc.api.BaseRestDocumentation;
 
@@ -334,7 +334,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
     this.mockMvc
         .perform(
             RestDocumentationRequestBuilders.get(
-                    restHelper.toUrl(Mapping.URL_WORKBASKET) + "?type=PERSONAL")
+                    restHelper.toUrl(RestEndpoints.URL_WORKBASKET) + "?type=PERSONAL")
                 .accept("application/hal+json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -349,7 +349,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.get(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000001"))
+                        RestEndpoints.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000001"))
                 .accept("application/hal+json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -369,7 +369,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.get(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID_ACCESSITEMS,
+                        RestEndpoints.URL_WORKBASKET_ID_ACCESSITEMS,
                         "WBI:100000000000000000000000000000000001"))
                 .accept("application/hal+json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
@@ -386,7 +386,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.get(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000001"))
+                        RestEndpoints.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000001"))
                 .accept("application/hal+json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -406,7 +406,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.delete(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID_DISTRIBUTION,
+                        RestEndpoints.URL_WORKBASKET_ID_DISTRIBUTION,
                         "WBI:100000000000000000000000000000000007"))
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isNoContent())
@@ -419,7 +419,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.get(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID_DISTRIBUTION,
+                        RestEndpoints.URL_WORKBASKET_ID_DISTRIBUTION,
                         "WBI:100000000000000000000000000000000002"))
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -438,7 +438,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
   void createWorkbasketDocTest() throws Exception {
     this.mockMvc
         .perform(
-            RestDocumentationRequestBuilders.post(restHelper.toUrl(Mapping.URL_WORKBASKET))
+            RestDocumentationRequestBuilders.post(restHelper.toUrl(RestEndpoints.URL_WORKBASKET))
                 .contentType("application/json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS)
                 .content(
@@ -460,7 +460,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
     URL url =
         new URL(
             restHelper.toUrl(
-                Mapping.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000002"));
+                RestEndpoints.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000002"));
     HttpURLConnection con = (HttpURLConnection) url.openConnection();
     con.setRequestMethod("GET");
     con.setRequestProperty("Authorization", ADMIN_CREDENTIALS);
@@ -482,7 +482,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.put(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000002"))
+                        RestEndpoints.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000002"))
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS)
                 .contentType("application/json")
                 .content(modifiedWorkbasket))
@@ -505,7 +505,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.delete(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000008"))
+                        RestEndpoints.URL_WORKBASKET_ID, "WBI:100000000000000000000000000000000008"))
                 .header("Authorization", ADMIN_CREDENTIALS))
         .andExpect(MockMvcResultMatchers.status().isNoContent())
         .andDo(MockMvcRestDocumentation.document("DeleteWorkbasketDocTest"));
@@ -517,7 +517,7 @@ class WorkbasketControllerRestDocumentation extends BaseRestDocumentation {
         .perform(
             RestDocumentationRequestBuilders.get(
                     restHelper.toUrl(
-                        Mapping.URL_WORKBASKET_ID_ACCESSITEMS,
+                        RestEndpoints.URL_WORKBASKET_ID_ACCESSITEMS,
                         "WBI:100000000000000000000000000000000001"))
                 .accept("application/hal+json")
                 .header("Authorization", TEAMLEAD_1_CREDENTIALS))
