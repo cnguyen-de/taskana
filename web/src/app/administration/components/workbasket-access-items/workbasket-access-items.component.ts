@@ -110,7 +110,7 @@ export class WorkbasketAccessItemsComponent implements OnInit, OnChanges, OnDest
     });
     this.accessItemsRepresentation$.subscribe((accessItemsRepresentation) => {
       if (typeof accessItemsRepresentation !== 'undefined') {
-        this.accessItemsRepresentation = accessItemsRepresentation;
+        this.accessItemsRepresentation = { ...accessItemsRepresentation };
         this.setAccessItemsGroups(accessItemsRepresentation.accessItems);
         this.accessItemsClone = this.cloneAccessItems(accessItemsRepresentation.accessItems);
         this.accessItemsResetClone = this.cloneAccessItems(accessItemsRepresentation.accessItems);

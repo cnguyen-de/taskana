@@ -51,6 +51,9 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
   inputOverflowMap = new Map<string, boolean>();
   validateInputOverflow: Function;
 
+  @Select(WorkbasketSelectors.selectedWorkbasket)
+  selectedWorkbasket$: Observable<Workbasket>;
+
   @Select(EngineConfigurationSelectors.workbasketsCustomisation)
   workbasketsCustomisation$: Observable<WorkbasketsCustomisation>;
 
@@ -79,6 +82,11 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
       ['CLEARANCE', 'Clearance'],
       ['TOPIC', 'Topic']
     ]);
+
+    this.selectedWorkbasket$.pipe(takeUntil(this.destroy$)).subscribe((selectedWorkbasket) => {
+      this.workbasket = selectedWorkbasket;
+      console.log(this.workbasket);
+    });
 
     this.customFields$ = this.workbasketsCustomisation$.pipe(
       map((customisation) => customisation.information),
@@ -110,7 +118,7 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
             this.onUndo();
             break;
           case ButtonAction.COPY:
-            this.copyWorkbasket();
+            // this.copyWorkbasket();
             break;
           case ButtonAction.REMOVE_AS_DISTRIBUTION_TARGETS:
             this.removeDistributionTargets();
@@ -159,9 +167,10 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
     );
   }
 
+  /*
   copyWorkbasket() {
     this.store.dispatch(new CopyWorkbasket(this.workbasket));
-  }
+  } */
 
   removeDistributionTargets() {
     this.store.dispatch(new RemoveDistributionTarget(this.workbasket._links.removeDistributionTargets.href));
@@ -192,10 +201,12 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
     this.addDateToWorkbasket();
     this.store.dispatch(new SaveNewWorkbasket(this.workbasket)).subscribe(() => {
       this.afterRequest();
+      console.log(this.action, this.workbasket);
       if (this.action === ACTION.COPY) {
         this.savingWorkbasket.triggerDistributionTargetSaving(
           new SavingInformation(this.workbasket._links.distributionTargets.href, this.workbasket.workbasketId)
         );
+        console.log('setting saving information ', this.workbasket.workbasketId);
         this.savingWorkbasket.triggerAccessItemsSaving(
           new SavingInformation(this.workbasket._links.accessItems.href, this.workbasket.workbasketId)
         );

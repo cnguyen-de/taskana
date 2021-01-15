@@ -19,6 +19,7 @@ import {
   SelectComponent,
   SelectWorkbasket,
   SetActiveAction,
+  UpdateSelectedWorkbasket,
   UpdateWorkbasket,
   UpdateWorkbasketAccessItems,
   UpdateWorkbasketDistributionTargets
@@ -105,12 +106,6 @@ export class WorkbasketState implements NgxsAfterBootstrap {
         break;
     }
 
-    this.location.go(
-      this.location
-        .path()
-        .replace(/(workbaskets).*/g, `workbaskets/(detail:${action.workbasketId})?tab=${selectedComponent}`)
-    );
-
     const id = action.workbasketId;
     if (typeof id !== 'undefined') {
       return this.workbasketService.getWorkBasket(id).pipe(
@@ -124,9 +119,16 @@ export class WorkbasketState implements NgxsAfterBootstrap {
           ctx.dispatch(
             new GetWorkbasketDistributionTargets(ctx.getState().selectedWorkbasket._links.distributionTargets.href)
           );
+
+          this.location.go(
+            this.location
+              .path()
+              .replace(/(workbaskets).*/g, `workbaskets/(detail:${action.workbasketId})?tab=${selectedComponent}`)
+          );
         })
       );
     }
+
     return of(null);
   }
 
@@ -211,6 +213,12 @@ export class WorkbasketState implements NgxsAfterBootstrap {
   copyWorkbasket(ctx: StateContext<WorkbasketStateModel>, action: CopyWorkbasket): Observable<any> {
     this.location.go(this.location.path().replace(/(workbaskets).*/g, 'workbaskets/(detail:new-workbasket)'));
     ctx.dispatch(new OnButtonPressed(undefined));
+
+    const workbasket = { ...ctx.getState().selectedWorkbasket };
+    // workbasket.workbasketId = undefined;
+    delete workbasket.workbasketId;
+    ctx.dispatch(new UpdateSelectedWorkbasket(workbasket));
+
     ctx.patchState({
       action: ACTION.COPY
     });
@@ -392,6 +400,12 @@ export class WorkbasketState implements NgxsAfterBootstrap {
         }
       )
     );
+  }
+
+  @Action(UpdateSelectedWorkbasket)
+  updateSelectedWorkbasket(ctx: StateContext<WorkbasketStateModel>, action: UpdateSelectedWorkbasket): Observable<any> {
+    ctx.patchState({ selectedWorkbasket: action.workbasket });
+    return of(null);
   }
 
   ngxsAfterBootstrap(ctx?: StateContext<any>): void {

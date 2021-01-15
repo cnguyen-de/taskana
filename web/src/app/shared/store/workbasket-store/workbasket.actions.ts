@@ -99,3 +99,8 @@ export class UpdateWorkbasketDistributionTargets {
   static readonly type = '[Workbasket] Update workbasket distribution targets';
   constructor(public url: string, public distributionTargetsIds: string[]) {}
 }
+
+export class UpdateSelectedWorkbasket {
+  static readonly type = '[Workbasket] Update the currently selected workbasket';
+  constructor(public workbasket: Workbasket) {}
+}

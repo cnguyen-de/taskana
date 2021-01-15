@@ -114,7 +114,7 @@ export class WorkbasketDistributionTargetsComponent implements OnInit, OnDestroy
       .pipe(takeUntil(this.destroy$))
       .subscribe((savingInformation: SavingInformation) => {
         if (this.action === ACTION.COPY) {
-          this.distributionTargetsSelectedResource._links.self.href = savingInformation.url;
+          this.distributionTargetsSelectedResource._links = { self: { href: savingInformation.url } };
           this.onSave();
         }
       });

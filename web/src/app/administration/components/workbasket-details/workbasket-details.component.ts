@@ -12,9 +12,11 @@ import { TaskanaDate } from '../../../shared/util/taskana.date';
 import { Location } from '@angular/common';
 import { WorkbasketType } from '../../../shared/models/workbasket-type';
 import {
+  CopyWorkbasket,
   DeselectWorkbasket,
   OnButtonPressed,
-  SelectComponent
+  SelectComponent,
+  UpdateSelectedWorkbasket
 } from '../../../shared/store/workbasket-store/workbasket.actions';
 import { ButtonAction } from '../../models/button-action';
 import { RequestInProgressService } from '../../../shared/services/request-in-progress/request-in-progress.service';
@@ -123,8 +125,10 @@ export class WorkbasketDetailsComponent implements OnInit, OnDestroy, OnChanges 
       this.requestInProgressService.setRequestInProgress(false);
     } else if (!workbasketIdSelected && this.action === ACTION.COPY) {
       // COPY
-      this.workbasket = { ...this.workbasketCopy };
-      delete this.workbasket.workbasketId;
+      // this.workbasket = { ...this.workbasketCopy };
+      // delete this.workbasket.workbasketId;
+      //this.workbasket.workbasketId = undefined;
+      //this.store.dispatch(new UpdateSelectedWorkbasket(this.workbasket));
       this.requestInProgressService.setRequestInProgress(false);
     }
     if (workbasketIdSelected) {
@@ -159,6 +163,7 @@ export class WorkbasketDetailsComponent implements OnInit, OnDestroy, OnChanges 
 
   onCopy() {
     this.store.dispatch(new OnButtonPressed(ButtonAction.COPY));
+    this.store.dispatch(new CopyWorkbasket(this.workbasket));
   }
 
   onRemoveAsDistributionTarget() {
