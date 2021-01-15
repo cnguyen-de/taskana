@@ -194,7 +194,7 @@ export class WorkbasketAccessItemsComponent implements OnInit, OnChanges, OnDest
       .pipe(takeUntil(this.destroy$))
       .subscribe((savingInformation: SavingInformation) => {
         if (this.action === ACTION.COPY) {
-          this.accessItemsRepresentation._links.self.href = savingInformation.url;
+          this.accessItemsRepresentation._links = { self: { href: savingInformation.url } };
           this.setWorkbasketIdForCopy(savingInformation.workbasketId);
           this.onSave();
         }

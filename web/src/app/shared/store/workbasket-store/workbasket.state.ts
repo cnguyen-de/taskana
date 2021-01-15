@@ -227,6 +227,7 @@ export class WorkbasketState implements NgxsAfterBootstrap {
 
   @Action(UpdateWorkbasket)
   updateWorkbasket(ctx: StateContext<WorkbasketStateModel>, action: UpdateWorkbasket): Observable<any> {
+    console.log(action.workbasket);
     ctx.dispatch(new OnButtonPressed(undefined));
     return this.workbasketService.updateWorkbasket(action.url, action.workbasket).pipe(
       take(1),

@@ -84,7 +84,9 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
     ]);
 
     this.selectedWorkbasket$.pipe(takeUntil(this.destroy$)).subscribe((selectedWorkbasket) => {
-      this.workbasket = selectedWorkbasket;
+      if (this.workbasket?.workbasketId !== selectedWorkbasket.workbasketId) {
+        this.workbasket = selectedWorkbasket;
+      }
       console.log(this.workbasket);
     });
 
@@ -178,10 +180,12 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
 
   onSave() {
     this.beforeRequest();
-    if (!this.workbasket.workbasketId) {
+    console.log(this.workbasket, this.workbasket.workbasketId);
+    if (typeof this.workbasket.workbasketId === 'undefined') {
       this.postNewWorkbasket();
       return;
     }
+    console.log('save data');
     this.store.dispatch(new UpdateWorkbasket(this.workbasket._links.self.href, this.workbasket)).subscribe(() => {
       this.requestInProgressService.setRequestInProgress(false);
       this.workbasketClone = { ...this.workbasket };
@@ -201,7 +205,7 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
     this.addDateToWorkbasket();
     this.store.dispatch(new SaveNewWorkbasket(this.workbasket)).subscribe(() => {
       this.afterRequest();
-      console.log(this.action, this.workbasket);
+      console.log('new', this.action, this.workbasket);
       if (this.action === ACTION.COPY) {
         this.savingWorkbasket.triggerDistributionTargetSaving(
           new SavingInformation(this.workbasket._links.distributionTargets.href, this.workbasket.workbasketId)
