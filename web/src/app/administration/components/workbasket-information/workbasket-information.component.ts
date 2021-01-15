@@ -16,6 +16,9 @@ import { NotificationService } from '../../../shared/services/notifications/noti
 import { CustomField, getCustomFields, WorkbasketsCustomisation } from '../../../shared/models/customisation';
 import {
   CopyWorkbasket,
+  GetAvailableDistributionTargets,
+  GetWorkbasketAccessItems,
+  GetWorkbasketDistributionTargets,
   MarkWorkbasketForDeletion,
   RemoveDistributionTarget,
   SaveNewWorkbasket,
@@ -83,12 +86,15 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
       ['TOPIC', 'Topic']
     ]);
 
-    this.selectedWorkbasket$.pipe(takeUntil(this.destroy$)).subscribe((selectedWorkbasket) => {
-      if (this.workbasket?.workbasketId !== selectedWorkbasket.workbasketId) {
-        this.workbasket = selectedWorkbasket;
-      }
-      console.log(this.workbasket);
-    });
+    this.selectedWorkbasket$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(filter((selectedWorkbasket) => typeof selectedWorkbasket !== 'undefined'))
+      .subscribe((selectedWorkbasket) => {
+        if (this.workbasket?.workbasketId !== selectedWorkbasket.workbasketId) {
+          this.workbasket = selectedWorkbasket;
+        }
+        console.log(this.workbasket);
+      });
 
     this.customFields$ = this.workbasketsCustomisation$.pipe(
       map((customisation) => customisation.information),
@@ -114,7 +120,7 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
       .subscribe((button) => {
         switch (button) {
           case ButtonAction.SAVE:
-            this.onSave();
+            this.onSubmit();
             break;
           case ButtonAction.UNDO:
             this.onUndo();
@@ -203,18 +209,19 @@ export class WorkbasketInformationComponent implements OnInit, OnChanges, OnDest
 
   postNewWorkbasket() {
     this.addDateToWorkbasket();
-    this.store.dispatch(new SaveNewWorkbasket(this.workbasket)).subscribe(() => {
+    this.store.dispatch(new SaveNewWorkbasket(this.workbasket)).subscribe((state) => {
       this.afterRequest();
-      console.log('new', this.action, this.workbasket);
-      if (this.action === ACTION.COPY) {
+      console.log({ state });
+      /*if (this.action === ACTION.COPY) {
+        console.log(this.workbasket, this.workbasket._links);
+
         this.savingWorkbasket.triggerDistributionTargetSaving(
           new SavingInformation(this.workbasket._links.distributionTargets.href, this.workbasket.workbasketId)
         );
-        console.log('setting saving information ', this.workbasket.workbasketId);
         this.savingWorkbasket.triggerAccessItemsSaving(
           new SavingInformation(this.workbasket._links.accessItems.href, this.workbasket.workbasketId)
         );
-      }
+      }*/
     });
   }
 

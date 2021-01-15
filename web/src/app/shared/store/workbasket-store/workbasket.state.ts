@@ -35,6 +35,7 @@ import { WorkbasketComponent } from '../../../administration/models/workbasket-c
 import { ButtonAction } from '../../../administration/models/button-action';
 import { ActivatedRoute } from '@angular/router';
 import { RequestInProgressService } from '../../services/request-in-progress/request-in-progress.service';
+import { SavingInformation } from '../../../administration/services/saving-workbaskets.service';
 
 class InitializeStore {
   static readonly type = '[Workbasket] Initializing state';
@@ -199,7 +200,24 @@ export class WorkbasketState implements NgxsAfterBootstrap {
             new Map<string, string>([['workbasketKey', workbasketUpdated.key]])
           );
 
-          ctx.dispatch(new SelectWorkbasket(workbasketUpdated.workbasketId));
+          if (ctx.getState().action === ACTION.COPY) {
+            ctx.dispatch(
+              new UpdateWorkbasketAccessItems(
+                workbasketUpdated._links.accessItems.href,
+                ctx.getState().workbasketAccessItems.accessItems
+              )
+            );
+            /*
+            this.savingWorkbasket.triggerDistributionTargetSaving(
+              new SavingInformation(workbasketUpdated._links.distributionTargets.href, workbasketUpdated.workbasketId)
+            );
+            this.savingWorkbasket.triggerAccessItemsSaving(
+              new SavingInformation(workbasketUpdated._links.accessItems.href, workbasketUpdated.workbasketId)
+            );
+            */
+          }
+
+          //ctx.dispatch(new SelectWorkbasket(workbasketUpdated.workbasketId));
           this.location.go(this.location.path().replace(/(workbaskets).*/g, 'workbaskets'));
         },
         (error) => {

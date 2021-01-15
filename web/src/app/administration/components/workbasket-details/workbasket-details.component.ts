@@ -74,6 +74,7 @@ export class WorkbasketDetailsComponent implements OnInit, OnDestroy, OnChanges 
       } else if (typeof selectedWorkbasketAndAction.selectedWorkbasket !== 'undefined') {
         this.workbasket = { ...selectedWorkbasketAndAction.selectedWorkbasket };
         this.getWorkbasketInformation(this.workbasket);
+        this.badgeMessage = '';
       }
     });
 
