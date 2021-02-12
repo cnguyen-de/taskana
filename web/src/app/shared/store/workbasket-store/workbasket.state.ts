@@ -37,11 +37,13 @@ import { RequestInProgressService } from '../../services/request-in-progress/req
 import { WorkbasketType } from '../../models/workbasket-type';
 import { TaskanaDate } from '../../util/taskana.date';
 import { DomainService } from '../../services/domain/domain.service';
+import { Injectable } from '@angular/core';
 
 class InitializeStore {
   static readonly type = '[Workbasket] Initializing state';
 }
 
+@Injectable()
 @State<WorkbasketStateModel>({ name: 'workbasket' })
 export class WorkbasketState implements NgxsAfterBootstrap {
   constructor(

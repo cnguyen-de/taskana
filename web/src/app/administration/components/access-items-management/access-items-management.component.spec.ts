@@ -4,7 +4,7 @@ import { FormsValidatorService } from '../../../shared/services/forms-validator/
 import { Actions, NgxsModule, ofActionDispatched, Store } from '@ngxs/store';
 import { Component, DebugElement, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AngularSvgIconModule } from 'angular-svg-icon';
+import { AngularSvgIconModule, SvgIconRegistryService } from 'angular-svg-icon';
 import { RequestInProgressService } from '../../../shared/services/request-in-progress/request-in-progress.service';
 import { NotificationService } from '../../../shared/services/notifications/notification.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -16,7 +16,7 @@ import { GetAccessItems } from '../../../shared/store/access-items-management-st
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TypeAheadComponent } from '../../../shared/components/type-ahead/type-ahead.component';
-import { TypeaheadModule } from 'ngx-bootstrap';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Direction, Sorting, WorkbasketAccessItemQuerySortParameter } from '../../../shared/models/sorting';
 import { StartupService } from '../../../shared/services/startup/startup.service';
@@ -36,6 +36,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 
+jest.mock('angular-svg-icon');
+
 const isFieldValidFn = jest.fn().mockReturnValue(true);
 const formValidatorServiceSpy = jest.fn().mockImplementation(
   (): Partial<FormsValidatorService> => ({
@@ -44,11 +46,9 @@ const formValidatorServiceSpy = jest.fn().mockImplementation(
 );
 
 const showDialogFn = jest.fn().mockReturnValue(true);
-const notificationServiceSpy = jest.fn().mockImplementation(
-  (): Partial<NotificationService> => ({
-    showDialog: showDialogFn
-  })
-);
+const notificationServiceSpy: Partial<NotificationService> = {
+  showDialog: showDialogFn
+};
 
 const mockDialogRef = {
   close: jasmine.createSpy('close')
@@ -105,14 +105,15 @@ describe('AccessItemsManagementComponent', () => {
         TaskanaSharedSpinnerStub
       ],
       providers: [
-        { provide: FormsValidatorService, useClass: formValidatorServiceSpy },
-        { provide: NotificationService, useClass: notificationServiceSpy },
+        { provide: FormsValidatorService, useValue: formValidatorServiceSpy },
+        { provide: NotificationService, useValue: notificationServiceSpy },
         { provide: MatDialogRef, useValue: { mockDialogRef } },
         RequestInProgressService,
         ClassificationCategoriesService,
         StartupService,
         TaskanaEngineService,
-        WindowRefService
+        WindowRefService,
+        SvgIconRegistryService
       ]
     }).compileComponents();
 
@@ -170,7 +171,10 @@ describe('AccessItemsManagementComponent', () => {
       { accessId: '1', name: 'users' },
       { accessId: '2', name: 'users' }
     ];
-    app.sortModel = { 'sort-by': WorkbasketAccessItemQuerySortParameter.ACCESS_ID, order: Direction.DESC };
+    app.sortModel = {
+      'sort-by': WorkbasketAccessItemQuerySortParameter.ACCESS_ID,
+      order: Direction.DESC
+    };
     app.searchForAccessItemsWorkbaskets();
     fixture.detectChanges();
     let actionDispatched = false;

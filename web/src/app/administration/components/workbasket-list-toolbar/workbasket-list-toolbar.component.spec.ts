@@ -21,12 +21,10 @@ import { Pair } from '../../../shared/models/pair';
 import { WorkbasketQueryFilterParameter } from '../../../shared/models/workbasket-query-filter-parameter';
 
 const getDomainFn = jest.fn().mockReturnValue(true);
-const domainServiceMock = jest.fn().mockImplementation(
-  (): Partial<DomainService> => ({
-    getDomains: getDomainFn,
-    getSelectedDomain: jest.fn().mockReturnValue(of('A'))
-  })
-);
+const domainServiceMock: Partial<DomainService> = {
+  getDomains: getDomainFn,
+  getSelectedDomain: jest.fn().mockReturnValue(of('A'))
+};
 
 @Component({ selector: 'taskana-administration-import-export', template: '' })
 class ImportExportStub {
@@ -47,11 +45,7 @@ class FilterStub {
   @Output() performFilter = new EventEmitter<WorkbasketQueryFilterParameter>();
 }
 
-const requestInProgressServiceSpy = jest.fn().mockImplementation(
-  (): Partial<RequestInProgressService> => ({
-    setRequestInProgress: jest.fn().mockReturnValue(of())
-  })
-);
+const requestInProgressServiceSpy = jest.fn().mockImplementation(() => jest.fn().mockReturnValue(of()));
 
 describe('WorkbasketListToolbarComponent', () => {
   let fixture: ComponentFixture<WorkbasketListToolbarComponent>;
@@ -73,8 +67,8 @@ describe('WorkbasketListToolbarComponent', () => {
       ],
       declarations: [WorkbasketListToolbarComponent, ImportExportStub, SortStub, FilterStub],
       providers: [
-        { provide: DomainService, useClass: domainServiceMock },
-        { provide: RequestInProgressService, useClass: requestInProgressServiceSpy },
+        { provide: DomainService, useValue: domainServiceMock },
+        { provide: RequestInProgressService, useValue: requestInProgressServiceSpy },
         WorkbasketService
       ]
     }).compileComponents();

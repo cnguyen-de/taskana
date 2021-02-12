@@ -11,12 +11,12 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { fromEventPattern } from 'rxjs';
 
-const TaskanaEngingeServiceSpy = jest.fn().mockImplementation(
-  (): Partial<TaskanaEngineServiceMock> => ({
-    hasRole: jest.fn().mockReturnValue(of()),
-    isHistoryProviderEnabled: jest.fn().mockReturnValue(of())
-  })
-);
+jest.mock('angular-svg-icon');
+
+const TaskanaEngineServiceSpy: Partial<TaskanaEngineServiceMock> = {
+  hasRole: jest.fn().mockReturnValue(of()),
+  isHistoryProviderEnabled: jest.fn().mockReturnValue(of())
+};
 
 describe('UserInformationComponent', () => {
   let component: UserInformationComponent;
@@ -27,7 +27,7 @@ describe('UserInformationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [UserInformationComponent],
       imports: [BrowserModule, AngularSvgIconModule, HttpClientTestingModule, BrowserAnimationsModule],
-      providers: [{ provide: TaskanaEngineService, useClass: TaskanaEngingeServiceSpy }]
+      providers: [{ provide: TaskanaEngineService, useValue: TaskanaEngineServiceSpy }]
     }).compileComponents();
   }));
 
