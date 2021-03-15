@@ -14,7 +14,7 @@ import { TaskListToolbarComponent } from './components/task-list-toolbar/task-li
 import { TaskMasterComponent } from './components/task-master/task-master.component';
 import { TaskdetailsComponent } from './components/taskdetails/taskdetails.component';
 import { TaskdetailsGeneralFieldsComponent } from './components/taskdetails-general/general-fields.component';
-import { TaskdetailsCustomFieldsComponent } from './components/taskdetails-custom-fields/custom-fields.component';
+import { TaskCustomFieldsComponent } from './components/task-custom-fields/task-custom-fields.component';
 import { TaskdetailsAttributeComponent } from './components/taskdetails-attribute/attribute.component';
 import { TaskComponent } from './components/task/task.component';
 import { GeneralFieldsExtensionComponent } from './components/taskdetails-general-fields-extension/general-fields-extension.component';
@@ -55,7 +55,7 @@ const DECLARATIONS = [
   TaskMasterComponent,
   TaskdetailsComponent,
   TaskdetailsGeneralFieldsComponent,
-  TaskdetailsCustomFieldsComponent,
+  TaskCustomFieldsComponent,
   TaskdetailsAttributeComponent,
   TaskComponent,
   GeneralFieldsExtensionComponent,
