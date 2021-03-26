@@ -4,11 +4,15 @@
   display: flex;
 
   &__task-list {
-    width: 500px;
+    min-width: 500px;
+    max-width: 500px;
   }
 
   &__task-details {
-    flex-grow: 1;
+    width: calc(100vw - 500px);
+    min-width: calc(920px - 500px);
+    height: calc(100vh - 56px);
+
   }
 
   &__empty-page {
